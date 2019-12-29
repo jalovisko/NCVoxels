@@ -12,6 +12,27 @@ import numpy as np # the library for working with matrices
 from mpl_toolkits.mplot3d import Axes3D # the library for working with 3D
 # objects
 
+# The surface class
+class Surface:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+        
+# The torus class (inherites from the surface class).
+# Note that the torus is made around the origin point (0, 0, 0).
+class Torus(Surface):
+    def __init__(self, radius, tube_radius):
+        n = 100
+
+        theta = np.linspace(0, 2.*np.pi, n)
+        phi = np.linspace(0, 2.*np.pi, n)
+        theta, phi = np.meshgrid(theta, phi)
+        
+        self.x = (radius + tube_radius*np.cos(theta)) * np.cos(phi)
+        self.y = (radius + tube_radius*np.cos(theta)) * np.sin(phi)
+        self.z = tube_radius * np.sin(theta)
+
 # The function for generating of a design space
 def make_ax(grid = False):
     fig = plt.figure()
@@ -24,15 +45,9 @@ def make_ax(grid = False):
 
 # The function for plotting a torus with matplotlib
 def make_torus():
-    n = 100
-
-    theta = np.linspace(0, 2.*np.pi, n)
-    phi = np.linspace(0, 2.*np.pi, n)
-    theta, phi = np.meshgrid(theta, phi)
-    c, a = 2, 1
-    x = (c + a*np.cos(theta)) * np.cos(phi)
-    y = (c + a*np.cos(theta)) * np.sin(phi)
-    z = a * np.sin(theta)
+    T = Torus(2, 1)
+    
+    (x, y, z) = (T.x, T.y, T.z)
     
     fig = plt.figure()
     ax1 = fig.add_subplot(121, projection='3d')
@@ -45,6 +60,7 @@ def make_torus():
     ax2.view_init(0, 0)
     ax2.set_xticks([])
     plt.show()
+    
 
 # Main function
 def main():
