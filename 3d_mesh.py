@@ -32,6 +32,8 @@ class Torus(Surface):
     def __init__(self, radius, tube_radius, n = 100):
 
         self.n = n
+        self.radius = radius
+        self.tube_radius = tube_radius
         
         theta = np.linspace(0, 2.*np.pi, n)
         phi = np.linspace(0, 2.*np.pi, n)
@@ -63,26 +65,11 @@ def make_ax(grid = False):
 def plot_torus(torus):
     (x, y, z) = (torus.x, torus.y, torus.z)
     
-    fig = plt.figure()
-    ax1 = fig.add_subplot(121, projection='3d')
-    ax1.set_zlim(-3,3)
-    ax1.plot_surface(x, y, z, rstride=5, cstride=5, color='k', edgecolors='w')
-    ax1.view_init(36, 26)
+    ax = make_ax(True)
+    ax.set_zlim(-3 * torus.tube_radius, 3 * torus.tube_radius)
+    ax.plot_surface(x, y, z, rstride=5, cstride=5, color='k', edgecolors='w')
+    ax.view_init(36, 26)
     
-    ax1.set_xlabel("x")
-    ax1.set_ylabel("y")
-    ax1.set_zlabel("z")
-    
-    ax2 = fig.add_subplot(122, projection='3d')
-    ax2.set_zlim(-3,3)
-    ax2.plot_surface(x, y, z, rstride=5, cstride=5, color='k', edgecolors='w')
-    ax2.view_init(0, 0)
-    
-    ax2.set_xlabel("x")
-    ax2.set_ylabel("y")
-    ax2.set_zlabel("z")
-    
-    ax2.set_xticks([])
     plt.show()
     
 
