@@ -18,7 +18,7 @@ class Surface:
         self.x = x
         self.y = y
         self.z = z
-    def center_of_mass(self):
+    def centroid(self):
         cm_x = np.average(self.x)
         cm_y = np.average(self.y)
         cm_z = np.average(self.z)
@@ -31,6 +31,8 @@ class Surface:
 class Torus(Surface):
     def __init__(self, radius, tube_radius, n = 100):
 
+        self.n = n
+        
         theta = np.linspace(0, 2.*np.pi, n)
         phi = np.linspace(0, 2.*np.pi, n)
         theta, phi = np.meshgrid(theta, phi)
@@ -38,6 +40,14 @@ class Torus(Surface):
         self.x = (radius + tube_radius*np.cos(theta)) * np.cos(phi)
         self.y = (radius + tube_radius*np.cos(theta)) * np.sin(phi)
         self.z = tube_radius * np.sin(theta)
+        
+    def centroid(self):
+        
+        cm_x = np.average(np.delete(self.x, self.n - 1, 0))
+        cm_y = np.average(np.delete(self.y, self.n - 1, 0))
+        cm_z = np.average(np.delete(self.z, self.n - 1, 0))
+        
+        return (cm_x, cm_y, cm_z)
 
 # The function for generating of a design space
 def make_ax(grid = False):
