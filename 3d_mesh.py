@@ -18,12 +18,18 @@ class Surface:
         self.x = x
         self.y = y
         self.z = z
+    def center_of_mass(self):
+        cm_x = np.average(self.x)
+        cm_y = np.average(self.y)
+        cm_z = np.average(self.z)
+        
+        return (cm_x, cm_y, cm_z)
+        
         
 # The torus class (inherites from the surface class).
 # Note that the torus is made around the origin point (0, 0, 0).
 class Torus(Surface):
-    def __init__(self, radius, tube_radius):
-        n = 100
+    def __init__(self, radius, tube_radius, n = 100):
 
         theta = np.linspace(0, 2.*np.pi, n)
         phi = np.linspace(0, 2.*np.pi, n)
@@ -44,10 +50,8 @@ def make_ax(grid = False):
     return ax
 
 # The function for plotting a torus with matplotlib
-def make_torus():
-    T = Torus(2, 1)
-    
-    (x, y, z) = (T.x, T.y, T.z)
+def plot_torus(torus):
+    (x, y, z) = (torus.x, torus.y, torus.z)
     
     fig = plt.figure()
     ax1 = fig.add_subplot(121, projection='3d')
@@ -61,6 +65,10 @@ def make_torus():
     ax2.set_xticks([])
     plt.show()
     
+
+# Function implementing the long-axis rule.
+def LAR(surface, n = 1):
+    pass
 
 # Main function
 def main():
