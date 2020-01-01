@@ -14,22 +14,30 @@ from mpl_toolkits.mplot3d import Axes3D # the library for working with 3D
 
 # The surface class
 class Surface:
-    def __init__(self, x, y, z):
+    def __init__(self, x, y, z, n = 100):
         self.x = x
         self.y = y
         self.z = z
+        self.n = n
     def centroid(self):
         cm_x = np.average(self.x)
         cm_y = np.average(self.y)
         cm_z = np.average(self.z)
         
         return (cm_x, cm_y, cm_z)
+    
+    def points(self):
+        pts = []
+        for i in range(0, self.n):
+            for j in range(0, self.n):
+                pts.append((self.x[i][j], self.y[i][j], self.z[i][j]))
+        return pts
         
         
 # The torus class (inherites from the surface class).
-# Note that the torus is made around the origin point (0, 0, 0).
+# Note that the torus is made around the origin point (0, 0, 0) by default.
 class Torus(Surface):
-    def __init__(self, radius, tube_radius, n = 100):
+    def __init__(self, radius, tube_radius, n = 100, origin = (0, 0, 0)):
 
         self.n = n
         self.radius = radius
@@ -39,9 +47,9 @@ class Torus(Surface):
         phi = np.linspace(0, 2.*np.pi, n)
         theta, phi = np.meshgrid(theta, phi)
         
-        self.x = (radius + tube_radius*np.cos(theta)) * np.cos(phi)
-        self.y = (radius + tube_radius*np.cos(theta)) * np.sin(phi)
-        self.z = tube_radius * np.sin(theta)
+        self.x = (origin[0] + radius + tube_radius*np.cos(theta)) * np.cos(phi)
+        self.y = (origin[1] + radius + tube_radius*np.cos(theta)) * np.sin(phi)
+        self.z = origin[2] + tube_radius * np.sin(theta)
         
     def centroid(self):
         
@@ -67,15 +75,18 @@ def plot_torus(torus):
     
     ax = make_ax(True)
     ax.set_zlim(-3 * torus.tube_radius, 3 * torus.tube_radius)
-    ax.plot_surface(x, y, z, rstride=5, cstride=5, color='k', edgecolors='w')
+    ax.plot_surface(x, y, z,rstride=5, cstride=5, color='k', edgecolors='w')
     ax.view_init(36, 26)
     
     plt.show()
     
 
 # Function implementing the long-axis rule.
-def LAR(surface, n = 1):
-    pass
+def LAR(surface):
+    (cm_x, cm_y, cm_z) = surface.centroid()
+    
+    S = surface
+    return S
 
 # Main function
 def main():
